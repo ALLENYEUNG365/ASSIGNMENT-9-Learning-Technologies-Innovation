@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepseek User Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.7;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2196F3;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        .auth-section {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .register-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        .register-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+            justify-content: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0b7dda;
+        }
+        .btn-secondary {
+            background-color: #7f8c8d;
+        }
+        .btn-secondary:hover {
+            background-color: #6c7a7d;
+        }
+        #searchBox {
+            margin: 20px auto;
+            text-align: center;
+        }
+        #searchInput {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+        }
+        .bookmarks {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .bookmark-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: transform 0.2s;
+        }
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin: 30px 0 20px;
+        }
+        .quiz {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .quiz h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .option {
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            border-color: #2196F3;
+            background: #f0f7ff;
+        }
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .completion {
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .feature-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+        .feature-list li {
+            margin-bottom: 10px;
+        }
+        .close {
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /* Steps styles */
+        .steps {
+            margin: 20px 0;
+        }
+        .step {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        .step:before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #2196F3;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        /* Chapter content area */
+        .chapter-content {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            display: none;
+        }
+        .chapter-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Assessment styles */
+        .assessment {
+            margin: 40px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        .assessment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #2196F3;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question {
+            margin-bottom: 30px;
+            display: none;
+        }
+        .question.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .question-number {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .assessment-results {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .score-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #2196F3;
+            margin: 20px 0;
+        }
+        .feedback {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e3f2fd;
+        }
+        .question-indicators {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        .indicator {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .indicator.active {
+            background-color: #2196F3;
+            color: white;
+        }
+        .indicator.completed {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .multiple-options .option {
+            margin-right: 10px;
+            display: inline-block;
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-section">
+        <button class="btn btn-secondary" id="showRegisterBtn">Register with Email</button>
+    </div>
+
+    <!-- Email registration form -->
+    <div class="register-form" id="registerForm">
+        <h3 class="section-title">Create Deepseek Account</h3>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="Please enter your email address" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Set Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Please set a password (at least 8 characters)" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Please re-enter your password" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" required> I have read and agree to the <a href="#" onclick="alert('Terms of Service content: ...')">Terms of Service</a> and <a href="#" onclick="alert('Privacy Policy content: ...')">Privacy Policy</a>
+                </label>
+            </div>
+            <button type="submit" class="btn">Register Account</button>
+            <button type="button" class="btn btn-secondary" id="cancelRegisterBtn" style="margin-left: 10px;">Cancel</button>
+        </form>
+    </div>
+
+    <div class="header">
+        <h1>Deepseek User Guide</h1>
+        <p>Master the core functions, usage tips, and advanced applications of this AI assistant tool</p>
+    </div>
+
+    <div class="buttons">
+        <button class="btn" id="btnWelcome">Welcome Introduction</button>
+        <button class="btn" id="btnChat">Smart Conversation Demo</button>
+        <button class="btn" id="btnDoc">Document Processing Demo</button>
+        <button class="btn" id="btnTips">Questioning Skills</button>
+        <button class="btn" id="btnSearch">Search Function</button>
+        <button class="btn btn-secondary" id="btnAssessment">Start Online Assessment</button>
+    </div>
+
+    <div id="searchBox">
+        <input type="text" id="searchInput" placeholder="Search guide content... e.g., How to use document summary function">
+    </div>
+
+    <div class="bookmarks">
+        <h3 class="section-title">E-book Navigation</h3>
+        <p>Click the buttons below to navigate to corresponding chapters. Click the stars to add/remove bookmarks</p>
+        <div>
+            <button class="btn btn-secondary page-btn" data-page="1">Chapter 1: Introduction to Deepseek</button>
+            <button class="bookmark-btn" data-page="1">☆</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="btn btn-secondary page-btn" data-page="2">Chapter 2: Core Functions Explained</button>
+            <button class="bookmark-btn" data-page="2">☆</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="btn btn-secondary page-btn" data-page="3">Chapter 3: Operation Guide</button>
+            <button class="bookmark-btn" data-page="3">☆</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="btn btn-secondary page-btn" data-page="4">Chapter 4: Advanced Usage Tips</button>
+            <button class="bookmark-btn" data-page="4">☆</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <button class="btn btn-secondary page-btn" data-page="5">Chapter 5: Frequently Asked Questions</button>
+            <button class="bookmark-btn" data-page="5">☆</button>
+        </div>
+    </div>
+
+    <!-- Chapter content areas -->
+    <div id="chapter1" class="chapter-content">
+        <h3 class="section-title">Chapter 1: Introduction to Deepseek</h3>
+        <p>Deepseek is an intelligent assistant tool based on advanced artificial intelligence technology, designed to provide users with efficient information processing and knowledge acquisition capabilities. This chapter will introduce Deepseek's basic concepts, development background, and core values.</p>
+        
+        <h4>1.1 What is Deepseek?</h4>
+        <p>Deepseek is an intelligent system integrating natural language processing, machine learning, and knowledge graph technologies. It can understand users' natural language instructions and provide accurate information feedback and problem-solving solutions.</p>
+        
+        <h4>1.2 Development Background</h4>
+        <p>With the rapid development of artificial intelligence technology, especially the breakthrough of large language models, intelligent assistant tools have been widely used in various industries. Deepseek emerged to provide users with a more intelligent and efficient assistant experience.</p>
+        
+        <h4>1.3 Core Values</h4>
+        <ul>
+            <li>Improve work efficiency: Automate repetitive tasks, saving time and energy</li>
+            <li>Accelerate learning process: Quickly acquire and organize knowledge, assist in understanding complex concepts</li>
+            <li>Inspire creative inspiration: Provide diverse ideas and suggestions, expand thinking boundaries</li>
+            <li>Optimize decision-making process: Provide objective suggestions based on data analysis, assist in making better decisions</li>
+        </ul>
+    </div>
+
+    <div id="chapter2" class="chapter-content">
+        <h3 class="section-title">Chapter 2: Core Functions Explained</h3>
+        <p>Deepseek has multiple core functions covering various scenarios from information acquisition to content creation. This chapter will detail these functions and their application scenarios.</p>
+        
+        <h4>2.1 Intelligent Conversation and Q&A</h4>
+        <p>This is the most basic and commonly used function of Deepseek. It can understand users' questions and provide accurate answers. It supports multi-turn conversations and can understand user intentions based on context.</p>
+        
+        <h4>2.2 Document Processing and Analysis</h4>
+        <p>Deepseek can upload and process documents in various formats, including PDF, Word, Excel, etc. It can quickly extract key information, generate summaries, and answer document-related questions.</p>
+        
+        <h4>2.3 Content Creation Assistance</h4>
+        <p>Whether writing emails, reports, articles, or creative content, Deepseek can provide strong support, helping users quickly generate first drafts and optimize them.</p>
+        
+        <h4>2.4 Code Assistance and Optimization</h4>
+        <p>Provide developers with code generation, explanation, debugging, and optimization suggestions, supporting multiple programming languages to improve development efficiency and code quality.</p>
+    </div>
+
+    <div id="chapter3" class="chapter-content">
+        <h3 class="section-title">Chapter 3: Operation Guide</h3>
+        <p>This chapter will detail the basic operation steps of Deepseek, helping users quickly get started with various functions.</p>
+        
+        <h4>3.1 Registration and Login</h4>
+        <div class="steps">
+            <div class="step" data-step="1">Visit the official Deepseek website or download the client</div>
+            <div class="step" data-step="2">Click the "Register" button and fill in the necessary personal information</div>
+            <div class="step" data-step="3">Verify your email or phone (according to system prompts)</div>
+            <div class="step" data-step="4">Log in to the system with your registered account and password</div>
+        </div>
+        
+        <h4>3.2 Basic Conversation Operation</h4>
+        <div class="steps">
+            <div class="step" data-step="1">After logging in, enter the main interface and find the conversation input box</div>
+            <div class="step" data-step="2">Enter your question or instruction in the input box</div>
+            <div class="step" data-step="3">Click the "Send" button or press Enter to submit</div>
+            <div class="step" data-step="4">Wait for the system response and view the reply content</div>
+            <div class="step" data-step="5">For further communication, you can continue to enter new questions</div>
+        </div>
+    </div>
+
+    <div id="chapter4" class="chapter-content">
+        <h3 class="section-title">Chapter 4: Advanced Usage Tips</h3>
+        <p>Mastering some advanced usage skills can significantly improve the efficiency and effectiveness of Deepseek. This chapter will share some practical skills and best practices.</p>
+        
+        <h4>4.1 The Art of Precise Questioning</h4>
+        <p>Clear and specific questions can get more accurate answers. It is recommended to include in your questions:</p>
+        <ul>
+            <li>Clear context and scenarios</li>
+            <li>Specific needs and goals</li>
+            <li>Expected output format and length</li>
+        </ul>
+        
+        <h4>4.2 Skills for Multi-turn Conversations</h4>
+        <p>In multi-turn conversations, you can use the following skills to improve efficiency:</p>
+        <ul>
+            <li>Gradually refine questions, from broad to specific</li>
+            <li>Refer to previous conversation content to maintain coherence</li>
+            <li>Provide timely feedback on satisfaction with answers to help the system adjust</li>
+        </ul>
+    </div>
+
+    <div id="chapter5" class="chapter-content">
+        <h3 class="section-title">Chapter 5: Frequently Asked Questions</h3>
+        <p>This chapter collects common questions and solutions encountered by users during the use of Deepseek, helping users quickly solve difficulties encountered during use.</p>
+        
+        <h4>5.1 Account-related Issues</h4>
+        <p><strong>Q: What if I forget my password?</strong><br>
+        A: Click "Forgot Password" on the login page and follow the prompts to reset your password via your registered email or phone.</p>
+        
+        <p><strong>Q: Can an account log in on multiple devices at the same time?</strong><br>
+        A: Yes, Deepseek supports simultaneous login on multiple devices, but for security reasons, a maximum of 5 devices can be online at the same time.</p>
+        
+        <h4>5.2 Function Usage Issues</h4>
+        <p><strong>Q: Why did document upload fail?</strong><br>
+        A: Possible reasons include file size exceeding limit (over 50MB), unsupported format, network issues, or file corruption. Please check and try again.</p>
+    </div>
+
+    <!-- Online Assessment Section -->
+    <div class="assessment" id="assessmentSection" style="display: none;">
+        <div class="assessment-header">
+            <h3 class="section-title">Deepseek Knowledge Assessment</h3>
+            <div id="assessmentProgressText">Question 1 of 5</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="assessmentProgressBar"></div>
+        </div>
+        
+        <div class="question-indicators" id="questionIndicators">
+            <!-- Question indicators will be generated by JavaScript -->
+        </div>
+        
+        <!-- Question 1 -->
+        <div class="question active" data-question="1">
+            <div class="question-number">Question 1</div>
+            <div class="question-text">Which of the following is NOT a core function of Deepseek?</div>
+            <div class="options">
+                <div class="option" data-correct="false">A. Intelligent conversation and Q&A</div>
+                <div class="option" data-correct="false">B. Document parsing and summarization</div>
+                <div class="option" data-correct="true">C. Video editing and production</div>
+                <div class="option" data-correct="false">D. Code assistance and optimization</div>
+            </div>
+        </div>
+        
+        <!-- Question 2 -->
+        <div class="question" data-question="2">
+            <div class="question-number">Question 2</div>
+            <div class="question-text">What is the maximum file size that Deepseek can process for document uploads?</div>
+            <div class="options">
+                <div class="option" data-correct="false">A. 10MB</div>
+                <div class="option" data-correct="true">B. 50MB</div>
+                <div class="option" data-correct="false">C. 100MB</div>
+                <div class="option" data-correct="false">D. 200MB</div>
+            </div>
+        </div>
+        
+        <!-- Question 3 -->
+        <div class="question" data-question="3">
+            <div class="question-number">Question 3</div>
+            <div class="question-text">Which of the following are recommended elements to include in questions for better results? (Select all that apply)</div>
+            <div class="options multiple-options">
+                <div class="option" data-correct="true">A. Clear context and scenarios</div>
+                <div class="option" data-correct="true">B. Specific needs and goals</div>
+                <div class="option" data-correct="true">C. Expected output format and length</div>
+                <div class="option" data-correct="false">D. Personal contact information</div>
+            </div>
+        </div>
+        
+        <!-- Question 4 -->
+        <div class="question" data-question="4">
+            <div class="question-number">Question 4</div>
+            <div class="question-text">How many devices can log in to a Deepseek account simultaneously?</div>
+            <div class="options">
+                <div class="option" data-correct="false">A. 1 device only</div>
+                <div class="option" data-correct="false">B. Up to 3 devices</div>
+                <div class="option" data-correct="true">C. Up to 5 devices</div>
+                <div class="option" data-correct="false">D. Unlimited devices</div>
+            </div>
+        </div>
+        
+        <!-- Question 5 -->
+        <div class="question" data-question="5">
+            <div class="question-number">Question 5</div>
+            <div class="question-text">Which skill is NOT recommended for multi-turn conversations with Deepseek?</div>
+            <div class="options">
+                <div class="option" data-correct="false">A. Gradually refine questions from broad to specific</div>
+                <div class="option" data-correct="false">B. Refer to previous conversation content</div>
+                <div class="option" data-correct="false">C. Provide feedback on answer satisfaction</div>
+                <div class="option" data-correct="true">D. Change topics frequently without context</div>
+            </div>
+        </div>
+        
+        <!-- Assessment Results -->
+        <div class="assessment-results" id="assessmentResults">
+            <h3>Assessment Completed!</h3>
+            <div class="score-display" id="scoreDisplay">0/5</div>
+            <div class="feedback" id="feedbackText"></div>
+            <button class="btn" id="restartAssessment">Restart Assessment</button>
+            <button class="btn btn-secondary" id="closeAssessment" style="margin-left: 10px;">Close Assessment</button>
+        </div>
+        
+        <div class="question-navigation">
+            <button class="btn btn-secondary" id="prevQuestion" disabled>Previous</button>
+            <button class="btn" id="nextQuestion">Next</button>
+            <button class="btn" id="submitAssessment" style="display: none;">Submit Assessment</button>
+        </div>
+    </div>
+
+    <div class="quiz">
+        <h3>Knowledge Quiz: Test Your Understanding</h3>
+        <p>Question: Which of the following is NOT a core function of Deepseek?</p>
+        <div class="option" data-correct="false">A. Intelligent conversation and Q&A</div>
+        <div class="option" data-correct="false">B. Document parsing and summarization</div>
+        <div class="option" data-correct="true">C. Video editing and production</div>
+        <div class="option" data-correct="false">D. Code assistance and optimization</div>
+        <div id="result"></div>
+    </div>
+
+    <div class="completion">
+        <button class="btn" id="btnComplete">Complete Learning, Receive Certificate</button>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="modalWelcome">
+        <div class="modal-content">
+            <h3>Welcome to Deepseek Intelligent Assistant</h3>
+            <p>Deepseek is an intelligent assistant tool based on advanced artificial intelligence technology, designed to help users improve work efficiency, accelerate learning processes, and optimize creative workflows.</p>
+            
+            <h4>Core Advantages</h4>
+            <ul class="feature-list">
+                <li><strong>Multi-scenario application</strong>: Suitable for students, professionals, and researchers alike</li>
+                <li><strong>Efficient processing capability</strong>: Quick response to complex instructions, handling various documents and questions</li>
+                <li><strong>Continuous learning and evolution</strong>: Constantly optimizing the model to improve answer quality and professionalism</li>
+                <li><strong>Privacy and security protection</strong>: Strictly protect user data and ensure information security</li>
+            </ul>
+            
+            <button class="close" data-modal="modalWelcome">Close</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modalChat">
+        <div class="modal-content">
+            <h3>Smart Conversation Demo</h3>
+            <p>Deepseek's intelligent conversation function can understand and respond to various user questions and needs, supporting multi-turn conversations and context understanding.</p>
+            
+            <div style="margin: 20px 0;">
+                <p>Please enter your question or request:</p>
+                <input type="text" placeholder="e.g., Explain what machine learning is in simple terms" style="width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box;">
+                <button class="btn">Send Request</button>
+            </div>
+            
+            <button class="close" data-modal="modalChat">Close</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modalDoc">
+        <div class="modal-content">
+            <h3>Document Processing Demo</h3>
+            <p>Deepseek can upload and process documents in various formats, quickly extracting key information, generating summaries, and answering document-related questions.</p>
+            
+            <div style="margin: 20px 0; padding: 20px; border: 2px dashed #ddd; text-align: center; border-radius: 4px;">
+                <p>Click the button below to upload a document for processing</p>
+                <button class="btn" style="margin-top: 10px;">Select Document to Upload</button>
+            </div>
+            
+            <button class="close" data-modal="modalDoc">Close</button>
+        </div>
+    </div>
+
+    <div class="modal" id="modalTips">
+        <div class="modal-content">
+            <h3>Questioning Skills: How to Get More Accurate Responses</h3>
+            <p>Effective questioning can significantly improve the quality of Deepseek's responses. Here are some practical questioning skills:</p>
+            
+            <h4>1. Clarify Scenario and Background</h4>
+            <p>Provide sufficient context information to let AI understand your usage scenario.</p>
+            
+            <h4>2. Clearly Express Needs</h4>
+            <p>Clearly state your goals and specific needs.</p>
+            
+            <div style="margin: 20px 0;">
+                <p>Please practice entering your question using the above skills:</p>
+                <textarea placeholder="e.g., I'm a college student needing to complete a course paper on environmental protection. Help me outline the paper" style="width: 100%; height: 100px; margin: 10px 0; padding: 10px; box-sizing: border-box;"></textarea>
+            </div>
+            
+            <button class="close" data-modal="modalTips">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Wait for page to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all functions
+            initModals();
+            initSearch();
+            initBookmarks();
+            initPageNavigation();
+            initQuiz();
+            initCompletion();
+            initRegistrationForm();
+            initAssessment(); // New assessment initialization
+            
+            console.log('All functions initialized successfully');
+        });
+
+        // Initialize registration form function
+        function initRegistrationForm() {
+            const showRegisterBtn = document.getElementById('showRegisterBtn');
+            const cancelRegisterBtn = document.getElementById('cancelRegisterBtn');
+            const registerForm = document.getElementById('registerForm');
+            const registrationForm = document.getElementById('registrationForm');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            // Show registration form
+            showRegisterBtn.addEventListener('click', function() {
+                registerForm.classList.add('active');
+                this.style.display = 'none';
+            });
+            
+            // Cancel registration
+            cancelRegisterBtn.addEventListener('click', function() {
+                registerForm.classList.remove('active');
+                showRegisterBtn.style.display = 'inline-block';
+            });
+            
+            // Form submission handling
+            registrationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Password verification
+                if (password.value !== confirmPassword.value) {
+                    alert('The passwords entered twice do not match. Please re-enter.');
+                    return;
+                }
+                
+                // Simulate successful registration
+                const email = document.getElementById('email').value;
+                alert(`Registration successful! A verification email has been sent to ${email}. Please check and complete verification.`);
+                
+                // Hide registration form
+                registerForm.classList.remove('active');
+                showRegisterBtn.style.display = 'inline-block';
+                
+                // Reset form
+                registrationForm.reset();
+            });
+        }
+
+        // Modal functionality
+        function initModals() {
+            // Open modals
+            document.getElementById('btnWelcome').addEventListener('click', function() {
+                document.getElementById('modalWelcome').classList.add('active');
+            });
+            
+            document.getElementById('btnChat').addEventListener('click', function() {
+                document.getElementById('modalChat').classList.add('active');
+            });
+            
+            document.getElementById('btnDoc').addEventListener('click', function() {
+                document.getElementById('modalDoc').classList.add('active');
+            });
+            
+            document.getElementById('btnTips').addEventListener('click', function() {
+                document.getElementById('modalTips').classList.add('active');
+            });
+            
+            // Close modals
+            document.querySelectorAll('.close').forEach(button => {
+                button.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-modal');
+                    document.getElementById(modalId).classList.remove('active');
+                });
+            });
+            
+            // Close when clicking outside modal
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        // Search functionality
+        function initSearch() {
+            const searchBtn = document.getElementById('btnSearch');
+            const searchInput = document.getElementById('searchInput');
+            
+            searchBtn.addEventListener('click', function() {
+                if (searchInput.style.display === 'none' || searchInput.style.display === '') {
+                    searchInput.style.display = 'inline-block';
+                    searchInput.focus();
+                } else {
+                    searchInput.style.display = 'none';
+                }
+            });
+            
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    alert(`Search results: Found content related to "${this.value}"`);
+                }
+            });
+        }
+
+        // Bookmark functionality
+        function initBookmarks() {
+            document.querySelectorAll('.bookmark-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    if (this.textContent === '☆') {
+                        this.textContent = '★';
+                        this.style.color = '#FFD700';
+                        alert(`Added Chapter ${page} to bookmarks`);
+                    } else {
+                        this.textContent = '☆';
+                        this.style.color = '';
+                        alert(`Removed Chapter ${page} from bookmarks`);
+                    }
+                });
+            });
+        }
+
+        // Chapter navigation functionality
+        function initPageNavigation() {
+            // Get all chapter buttons
+            const pageButtons = document.querySelectorAll('.page-btn');
+            
+            // Add click event to each button
+            pageButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Hide all chapter contents
+                    document.querySelectorAll('.chapter-content').forEach(chapter => {
+                        chapter.classList.remove('active');
+                    });
+                    
+                    // Get current chapter number
+                    const page = this.getAttribute('data-page');
+                    
+                    // Show corresponding chapter content
+                    const chapterElement = document.getElementById(`chapter${page}`);
+                    if (chapterElement) {
+                        chapterElement.classList.add('active');
+                        
+                        // Scroll to chapter content area
+                        chapterElement.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        alert(`Chapter ${page} content is loading...`);
+                    }
+                });
+            });
+        }
+
+        // Quiz functionality
+        function initQuiz() {
+            const options = document.querySelectorAll('.option');
+            const result = document.getElementById('result');
+            
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Reset all option styles
+                    options.forEach(opt => {
+                        opt.style.backgroundColor = '';
+                        opt.style.color = '';
+                        opt.style.borderColor = '#ddd';
+                    });
+                    
+                    const isCorrect = this.getAttribute('data-correct') === 'true';
+                    
+                    // Set current option style
+                    this.style.backgroundColor = isCorrect ? '#dff0d8' : '#f2dede';
+                    this.style.color = isCorrect ? '#3c763d' : '#a94442';
+                    this.style.borderColor = isCorrect ? '#3c763d' : '#a94442';
+                    
+                    // Show result
+                    result.textContent = isCorrect ? 
+                        'Correct! Deepseek does not currently provide video editing and production functions.' : 
+                        'Incorrect, please try again.';
+                    result.style.color = isCorrect ? '#3c763d' : '#a94442';
+                    result.style.backgroundColor = isCorrect ? '#dff0d8' : '#f2dede';
+                });
+            });
+        }
+
+        // Completion functionality
+        function initCompletion() {
+            document.getElementById('btnComplete').addEventListener('click', function() {
+                const confirmComplete = confirm('Confirm that you have completed all chapters?');
+                
+                if (confirmComplete) {
+                    alert('Congratulations on completing all content of the Deepseek User Guide!\nThe "Deepseek Expert" electronic certificate has been generated.');
+                }
+            });
+        }
+
+        // Assessment functionality
+        function initAssessment() {
+            const assessmentSection = document.getElementById('assessmentSection');
+            const btnAssessment = document.getElementById('btnAssessment');
+            const closeAssessment = document.getElementById('closeAssessment');
+            const restartAssessment = document.getElementById('restartAssessment');
+            const questions = document.querySelectorAll('.question');
+            const prevQuestion = document.getElementById('prevQuestion');
+            const nextQuestion = document.getElementById('nextQuestion');
+            const submitAssessment = document.getElementById('submitAssessment');
+            const assessmentProgressBar = document.getElementById('assessmentProgressBar');
+            const assessmentProgressText = document.getElementById('assessmentProgressText');
+            const questionIndicators = document.getElementById('questionIndicators');
+            const assessmentResults = document.getElementById('assessmentResults');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const feedbackText = document.getElementById('feedbackText');
+            
+            let currentQuestion = 1;
+            const totalQuestions = questions.length;
+            const userAnswers = {};
+            
+            // Generate question indicators
+            for (let i = 1; i <= totalQuestions; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = `indicator ${i === 1 ? 'active' : ''}`;
+                indicator.textContent = i;
+                indicator.setAttribute('data-question', i);
+                
+                indicator.addEventListener('click', function() {
+                    const questionNum = parseInt(this.getAttribute('data-question'));
+                    if (questionNum !== currentQuestion) {
+                        goToQuestion(questionNum);
+                    }
+                });
+                
+                questionIndicators.appendChild(indicator);
+            }
+            
+            // Show assessment section
+            btnAssessment.addEventListener('click', function() {
+                assessmentSection.style.display = 'block';
+                assessmentSection.scrollIntoView({ behavior: 'smooth' });
+                updateProgress();
+            });
+            
+            // Close assessment
+            closeAssessment.addEventListener('click', function() {
+                assessmentSection.style.display = 'none';
+                resetAssessment();
+            });
+            
+            // Restart assessment
+            restartAssessment.addEventListener('click', function() {
+                resetAssessment();
+                assessmentResults.style.display = 'none';
+                questions.forEach(q => q.style.display = 'none');
+                questions[0].style.display = 'block';
+                currentQuestion = 1;
+                updateProgress();
+            });
+            
+            // Previous question
+            prevQuestion.addEventListener('click', function() {
+                if (currentQuestion > 1) {
+                    goToQuestion(currentQuestion - 1);
+                }
+            });
+            
+            // Next question
+            nextQuestion.addEventListener('click', function() {
+                if (currentQuestion < totalQuestions) {
+                    goToQuestion(currentQuestion + 1);
+                }
+            });
+            
+            // Submit assessment
+            submitAssessment.addEventListener('click', function() {
+                calculateScore();
+                assessmentResults.style.display = 'block';
+                questions.forEach(q => q.style.display = 'none');
+                prevQuestion.style.display = 'none';
+                nextQuestion.style.display = 'none';
+                submitAssessment.style.display = 'none';
+            });
+            
+            // Handle option selection
+            document.querySelectorAll('.question .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionEl = this.closest('.question');
+                    const questionNum = parseInt(questionEl.getAttribute('data-question'));
+                    const isMultiple = questionEl.querySelector('.multiple-options') !== null;
+                    
+                    // For multiple choice questions, allow multiple selections
+                    if (isMultiple) {
+                        this.classList.toggle('selected');
+                        this.style.backgroundColor = this.classList.contains('selected') ? '#e3f2fd' : '';
+                        this.style.borderColor = this.classList.contains('selected') ? '#2196F3' : '#ddd';
+                        
+                        // Store multiple answers
+                        const selectedOptions = Array.from(questionEl.querySelectorAll('.option.selected'))
+                            .map(opt => opt.getAttribute('data-correct') === 'true');
+                        userAnswers[questionNum] = selectedOptions;
+                    } else {
+                        // For single choice questions, only allow one selection
+                        questionEl.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                            opt.style.backgroundColor = '';
+                            opt.style.borderColor = '#ddd';
+                        });
+                        
+                        this.classList.add('selected');
+                        this.style.backgroundColor = '#e3f2fd';
+                        this.style.borderColor = '#2196F3';
+                        
+                        // Store single answer
+                        userAnswers[questionNum] = this.getAttribute('data-correct') === 'true';
+                    }
+                    
+                    // Mark question as completed
+                    markQuestionAsCompleted(questionNum);
+                    
+                    // Auto move to next question if not on last
+                    if (currentQuestion < totalQuestions) {
+                        nextQuestion.disabled = false;
+                    } else {
+                        submitAssessment.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Function to navigate to specific question
+            function goToQuestion(questionNum) {
+                // Hide current question
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.remove('active');
+                document.querySelector(`.indicator[data-question="${currentQuestion}"]`).classList.remove('active');
+                
+                // Show target question
+                currentQuestion = questionNum;
+                document.querySelector(`.question[data-question="${currentQuestion}"]`).classList.add('active');
+                document.querySelector(`.indicator[data-question="${currentQuestion}"]`).classList.add('active');
+                
+                // Update buttons state
+                prevQuestion.disabled = currentQuestion === 1;
+                nextQuestion.style.display = currentQuestion === totalQuestions ? 'none' : 'block';
+                submitAssessment.style.display = currentQuestion === totalQuestions ? 'block' : 'none';
+                
+                // Update progress
+                updateProgress();
+            }
+            
+            // Update progress bar and text
+            function updateProgress() {
+                const progress = (currentQuestion / totalQuestions) * 100;
+                assessmentProgressBar.style.width = `${progress}%`;
+                assessmentProgressText.textContent = `Question ${currentQuestion} of ${totalQuestions}`;
+            }
+            
+            // Mark question as completed
+            function markQuestionAsCompleted(questionNum) {
+                const indicator = document.querySelector(`.indicator[data-question="${questionNum}"]`);
+                if (indicator && !indicator.classList.contains('completed')) {
+                    indicator.classList.add('completed');
+                }
+            }
+            
+            // Calculate score
+            function calculateScore() {
+                let score = 0;
+                
+                questions.forEach(question => {
+                    const questionNum = parseInt(question.getAttribute('data-question'));
+                    const isMultiple = question.querySelector('.multiple-options') !== null;
+                    const correctOptions = Array.from(question.querySelectorAll('.option'))
+                        .map(opt => opt.getAttribute('data-correct') === 'true');
+                    
+                    if (isMultiple) {
+                        // For multiple choice, check if all correct options are selected
+                        const userAnswersForQ = userAnswers[questionNum] || [];
+                        let allCorrect = true;
+                        
+                        correctOptions.forEach((isCorrect, index) => {
+                            const userSelected = userAnswersForQ[index] || false;
+                            if (isCorrect !== userSelected) {
+                                allCorrect = false;
+                            }
+                        });
+                        
+                        if (allCorrect) score++;
+                    } else {
+                        // For single choice
+                        if (userAnswers[questionNum] === true) {
+                            score++;
+                        }
+                    }
+                });
+                
+                // Update score display
+                scoreDisplay.textContent = `${score}/${totalQuestions}`;
+                
+                // Set feedback based on score
+                let feedback = '';
+                if (score === totalQuestions) {
+                    feedback = 'Excellent! You have a perfect understanding of Deepseek!';
+                } else if (score >= totalQuestions * 0.8) {
+                    feedback = 'Great job! You have a good understanding of Deepseek.';
+                } else if (score >= totalQuestions * 0.6) {
+                    feedback = 'Good effort! You have a basic understanding of Deepseek, but there\'s room for improvement.';
+                } else {
+                    feedback = 'Consider reviewing the user guide again to improve your understanding of Deepseek.';
+                }
+                feedbackText.textContent = feedback;
+            }
+            
+            // Reset assessment
+            function resetAssessment() {
+                currentQuestion = 1;
+                userAnswers = {};
+                
+                // Reset all options
+                document.querySelectorAll('.question .option').forEach(option => {
+                    option.classList.remove('selected');
+                    option.style.backgroundColor = '';
+                    option.style.borderColor = '#ddd';
+                });
+                
+                // Reset indicators
+                document.querySelectorAll('.indicator').forEach((indicator, index) => {
+                    indicator.classList.remove('active', 'completed');
+                    if (index === 0) indicator.classList.add('active');
+                });
+                
+                // Reset buttons
+                prevQuestion.disabled = true;
+                nextQuestion.style.display = 'block';
+                submitAssessment.style.display = 'none';
+                
+                // Reset progress
+                updateProgress();
+            }
+        }
+    </script>
+</body>
+</html>
